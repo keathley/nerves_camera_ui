@@ -11,9 +11,8 @@
     var channel = socket.channel("video:lobby");
     var streaming = true;
     channel.on("next_frame", function(msg) {
-      if (streaming) {
-        videoFrame.setAttribute("src", "data:image/png;base64," + msg.base64_data)
-      }
+      console.count("message", msg)
+      videoFrame.setAttribute("src", "data:image/png;base64," + msg.base64_data)
     });
     channel.on("take_picture", function(msg) {
       streaming = false;
