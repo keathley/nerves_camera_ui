@@ -1,24 +1,69 @@
-<html>
-<head><title>PhotoBooth Camera</title></head>
-<body>
-  <img id="video-frame" />
+<div class="photobooth">
+  <div class="image-wrapper">
+    <img class="photobooth-image" id="video-frame" />
+  </div>
+  <div class="photobooth-actions">
+    <button class="btn take-photo js-take-photo">
+      Take Picture
+    </button>
+  </div>
+</div>
+
   <script src="js/phoenix.js"></script>
   <script>
-    var videoFrame = document.getElementById("video-frame");
-    var socket = new Phoenix.Socket("/socket");
-    socket.connect();
+   (function() {
+     var videoFrame = document.getElementById("video-frame")
+       , $overlay = document.querySelector('.js-overlay')
+       , $takePictureBtn = document.querySelector('.js-take-photo')
+       , streaming  = true
 
-    var channel = socket.channel("video:lobby");
-    var streaming = true;
-    channel.on("next_frame", function(msg) {
-      console.count("message", msg)
-      videoFrame.setAttribute("src", "data:image/png;base64," + msg.base64_data)
-    });
-    channel.on("take_picture", function(msg) {
-      streaming = false;
-      videoFrame.setAttribute("src", "data:image/png;base64," + msg.base64_data)
-    });
-    channel.join();
+     function flashScreen() {
+       $overlay.style.display = 'block'
+       setTimeout(startFlash, 10)
+
+       function startFlash() {
+         $overlay.classList.add('start-flash')
+         setTimeout(removeFlash, 500)
+       }
+
+       function removeFlash() {
+         $overlay.classList.remove('start-flash')
+         $overlay.classList.add('stop-flash')
+         setTimeout(resetFlash, 2000)
+       }
+
+       function resetFlash() {
+         $overlay.classList.remove('stop-flash')
+         $overlay.style.display = 'none'
+       }
+     }
+
+     function takePhoto() {
+       console.log('take photo')
+       streaming = false
+       flashScreen()
+     }
+
+     function setImage(img_data) {
+       videoFrame.setAttribute("src", "data:image/png;base64," + img_data)
+     }
+
+     function onNewFrame(msg) {
+       if (!streaming) { return }
+       setImage(msg.base64_data)
+     }
+
+     var socket  = new Phoenix.Socket("/socket")
+       , channel = socket.channel('video:lobby')
+
+     socket.connect()
+
+     channel.on("next_frame", onNewFrame);
+
+     $takePictureBtn.onclick = takePhoto
+
+     channel.join()
+            .receive("ok", (payload) => console.log("Connected", payload))
+            .receive("error", (payload) => console.log("Error"))
+   })();
   </script>
-</body>
-</html>
