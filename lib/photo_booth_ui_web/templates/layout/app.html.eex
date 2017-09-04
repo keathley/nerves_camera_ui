@@ -12,7 +12,13 @@
     <style>
 
      body {
+       position: absolute;
+       top: 0;
+       right: 0;
+       bottom: 0;
+       left: 0;
        margin: 0;
+       padding-bottom: 3em;
        background-color: #efefef;
      }
 
@@ -28,24 +34,25 @@
      }
 
      .photobooth {
-       padding-top: 1em;
-       padding-right: 1em;
-       padding-bottom: 1em;
-       padding-left: 1em;
-       width: 600px;
+       padding: 0.4em;
+       width: 558px;
+       /* width: 600px; */
+       height: 100%;
        margin: 10px auto;
 
-       border: 1px solid #aaa;
+       /* border: 1px solid #aaa; */
+       border: 1px solid #d6d6d6;
        border-radius: 3px;
 
-       background-color: #e2e2e2;
+       /* background-color: #e2e2e2; */
+       background-color: #fff;
        box-shadow: 0px 3px 15px #777676;
      }
 
      .image-wrapper {
-       padding: 3px;
-       box-shadow: inset 0px 0px 8px #4e4d4d;
-       border-radius: 4px;
+       /* padding: 3px;
+          box-shadow: inset 0px 0px 8px #4e4d4d;
+          border-radius: 4px; */
      }
 
      .photobooth-image {
@@ -89,8 +96,6 @@
 
   <body>
     <div class="overlay js-overlay"></div>
-    <main role="main">
-      <%= render @view_module, @view_template, assigns %>
-    </main>
+    <%= render @view_module, @view_template, assigns %>
   </body>
 </html>
