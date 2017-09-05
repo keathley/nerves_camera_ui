@@ -1,4 +1,5 @@
 <div class="photobooth">
+  <div class="cancel-button js-cancel-button">X</div>
   <div class="image-wrapper">
     <img class="photobooth-image" id="video-frame" />
   </div>
@@ -6,6 +7,12 @@
     <button class="btn take-photo js-take-photo">
       Take Picture
     </button>
+    <div class="twitter-form hide js-twitter-form">
+      <textarea placeholder="Hello from elixirconf..." name="tweet" class="form-field"></textarea>
+      <button type="submit" class="btn twitter-btn js-twitter-btn">
+        Tweet
+      </button>
+    </div>
   </div>
 </div>
 
@@ -15,9 +22,10 @@
      var videoFrame = document.getElementById("video-frame")
        , $overlay = document.querySelector('.js-overlay')
        , $takePictureBtn = document.querySelector('.js-take-photo')
+       , $twitterForm = document.querySelector('.js-twitter-form')
        , streaming  = true
 
-     function flashScreen() {
+     function flashScreen(cb) {
        $overlay.style.display = 'block'
        setTimeout(startFlash, 10)
 
@@ -27,9 +35,10 @@
        }
 
        function removeFlash() {
+         cb()
          $overlay.classList.remove('start-flash')
          $overlay.classList.add('stop-flash')
-         setTimeout(resetFlash, 2000)
+         setTimeout(resetFlash, 1000)
        }
 
        function resetFlash() {
@@ -41,7 +50,10 @@
      function takePhoto() {
        console.log('take photo')
        streaming = false
-       flashScreen()
+       flashScreen(function() {
+        $takePictureBtn.classList.add('hide')
+        $twitterForm.classList.remove('hide')
+       })
      }
 
      function setImage(img_data) {

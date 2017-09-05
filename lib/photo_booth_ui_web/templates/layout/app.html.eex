@@ -26,12 +26,14 @@
        border: 1px solid #aaa;
        background: #ccc;
        font-size: 24px;
-       font-weight: lighter;
+       /* font-weight: lighter; */
        text-align: center;
        cursor: pointer;
        color: #222;
        letter-spacing: 1.3px;
      }
+
+     .hide { display: none; }
 
      .photobooth {
        padding: 0.4em;
@@ -49,10 +51,45 @@
        box-shadow: 0px 3px 15px #777676;
      }
 
+     .cancel-button {
+       position: absolute;
+       top: 0;
+       right: 0;
+     }
+
+     .form-field {
+       border: 1px solid #ccc;
+     }
+
+     textarea.form-field {
+       resize: none;
+       height: 80px;
+       width: 76%;
+       border-radius: 4px;
+       font-size: 16px;
+       font-weight: lighter;
+       letter-spacing: 0.07em;
+       padding: 0.4em 0.6em;
+       box-shadow: inset 0px 0px 4px 1px #ccc;
+     }
+
+     .twitter-btn {
+       display: inline-block;
+       width: 125px;
+       float: right;
+       font-weight: normal;
+       font-size: 18px;
+       color: #fff;
+       background-color: #591be8;
+       border: none;
+     }
+
+     .twitter-form {
+       text-align: initial;
+       padding-top: 1em;
+     }
+
      .image-wrapper {
-       /* padding: 3px;
-          box-shadow: inset 0px 0px 8px #4e4d4d;
-          border-radius: 4px; */
      }
 
      .photobooth-image {
