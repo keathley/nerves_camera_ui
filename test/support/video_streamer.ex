@@ -17,7 +17,7 @@ defmodule PhotoBoothUi.FakeVideoStreamer do
   def handle_info(:send_frame, [frame | frames]) do
     msg = %{base64_data: frame}
     PhotoBoothUiWeb.Endpoint.broadcast("video:lobby", "next_frame", msg)
-    Process.send_after(self(), :send_frame, 100)
+    Process.send_after(self(), :send_frame, 60)
     {:noreply, frames ++ [frame]}
   end
 end
