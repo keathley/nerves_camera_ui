@@ -1,6 +1,10 @@
 defmodule PhotoBoothUiWeb.VideoChannel do
   use PhotoBoothUiWeb, :channel
 
+  @tweet_length 140
+  @tweet_tags " #ElixirFriends #ElixirConf2017"
+  @tweet_slice @tweet_length - String.length(@tweet_tags)
+
   def join("video:lobby", payload, socket) do
     if authorized?(payload) do
       {:ok, socket}
@@ -29,8 +33,21 @@ defmodule PhotoBoothUiWeb.VideoChannel do
     {:noreply, socket}
   end
 
+  def handle_in("tweet", %{"img" => img, "msg" => msg}, socket) do
+    tweet(msg, img)
+    camera()
+    |> GenServer.cast({:set_img_effect, "none"})
+    {:noreply, socket}
+  end
+
   defp camera() do
     GenServer.whereis({:global, PhotoBooth.Camera})
+  end
+
+  def tweet(msg, img) do
+    msg = String.slice(msg, 0, @tweet_slice) <> @tweet_tags
+    img = Base.decode64!(img)
+    ExTwitter.update_with_media(msg, img)
   end
 
   # Add authorization logic here as required.
