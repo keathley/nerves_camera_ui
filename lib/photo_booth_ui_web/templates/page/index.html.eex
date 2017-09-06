@@ -142,6 +142,7 @@
      , $backButton = document.querySelector('.js-cancel-button')
      , $twitterForm = document.querySelector('.js-twitter-form')
      , $effectSelect = document.querySelector('.js-effect-select')
+     , $effects = document.getElementsByName('effect')
      , streaming  = true
 
    function flashScreen(cb) {
@@ -202,10 +203,10 @@
      show($effectSelect)
    }
 
-   function updateEffect() {
-     var effect = $effectSelect.options[$effectSelect.selectedIndex].text
-     console.log("updating effect", effect)
-     channel.push('update_effect', {effect: 'watercolor'})
+   function updateEffect(e) {
+     var effect = e.currentTarget.value
+     console.log('updating effect', effect)
+     channel.push('update_effect', {effect: effect})
    }
 
    function onKeyDown(e) {
@@ -223,6 +224,9 @@
 
    document.addEventListener('keydown', onKeyDown)
    $backButton.onclick = refresh
+   $effects.forEach(function($el) {
+     $el.addEventListener('click', updateEffect)
+   })
   //  $effectSelect.addEventListener('change', updateEffect)
 
    channel.join()
