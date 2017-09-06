@@ -1,5 +1,7 @@
 <div class="photobooth">
-  <div class="cancel-button js-cancel-button">X</div>
+  <div class="hide cancel-button-border js-cancel-button">
+    <div class="cancel-button">✖</div>
+  </div>
   <div class="image-wrapper">
     <img class="photobooth-image" id="video-frame" />
   </div>
@@ -16,66 +18,87 @@
   </div>
 </div>
 
-  <script src="js/phoenix.js"></script>
-  <script>
-   (function() {
-     var videoFrame = document.getElementById("video-frame")
-       , $overlay = document.querySelector('.js-overlay')
-       , $takePictureBtn = document.querySelector('.js-take-photo')
-       , $twitterForm = document.querySelector('.js-twitter-form')
-       , streaming  = true
+<script src="js/phoenix.js"></script>
+<script>
+ (function() {
+   var videoFrame = document.getElementById("video-frame")
+     , $overlay = document.querySelector('.js-overlay')
+     , $backButton = document.querySelector('.js-cancel-button')
+     , $takePictureBtn = document.querySelector('.js-take-photo')
+     , $twitterForm = document.querySelector('.js-twitter-form')
+     , streaming  = true
 
-     function flashScreen(cb) {
-       $overlay.style.display = 'block'
-       setTimeout(startFlash, 10)
+   function flashScreen(cb) {
+     $overlay.style.display = 'block'
+     setTimeout(startFlash, 10)
 
-       function startFlash() {
-         $overlay.classList.add('start-flash')
-         setTimeout(removeFlash, 500)
-       }
-
-       function removeFlash() {
-         cb()
-         $overlay.classList.remove('start-flash')
-         $overlay.classList.add('stop-flash')
-         setTimeout(resetFlash, 1000)
-       }
-
-       function resetFlash() {
-         $overlay.classList.remove('stop-flash')
-         $overlay.style.display = 'none'
-       }
+     function startFlash() {
+       $overlay.classList.add('start-flash')
+       setTimeout(removeFlash, 500)
      }
 
-     function takePhoto() {
-       console.log('take photo')
-       streaming = false
-       flashScreen(function() {
-        $takePictureBtn.classList.add('hide')
-        $twitterForm.classList.remove('hide')
-       })
+     function removeFlash() {
+       cb()
+       $overlay.classList.remove('start-flash')
+       $overlay.classList.add('stop-flash')
+       show($backButton)
+       setTimeout(resetFlash, 1000)
      }
 
-     function setImage(img_data) {
-       videoFrame.setAttribute("src", "data:image/png;base64," + img_data)
+     function resetFlash() {
+       $overlay.classList.remove('stop-flash')
+       $overlay.style.display = 'none'
      }
+   }
 
-     function onNewFrame(msg) {
-       if (!streaming) { return }
-       setImage(msg.base64_data)
-     }
+   function takePhoto() {
+     console.log('take photo')
+     streaming = false
+     flashScreen(function() {
+       $takePictureBtn.classList.add('hide')
+       $twitterForm.classList.remove('hide')
+     })
+   }
 
-     var socket  = new Phoenix.Socket("/socket")
-       , channel = socket.channel('video:lobby')
+   function setImage(img_data) {
+     videoFrame.setAttribute("src", "data:image/png;base64," + img_data)
+   }
 
-     socket.connect()
+   function onNewFrame(msg) {
+     if (!streaming) { return }
+     setImage(msg.base64_data)
+   }
 
-     channel.on("next_frame", onNewFrame);
+   function hide($el) {
+     $el.classList.add('hide')
+   }
 
-     $takePictureBtn.onclick = takePhoto
+   function show($el) {
+     $el.classList.remove('hide')
+   }
 
-     channel.join()
-            .receive("ok", (payload) => console.log("Connected", payload))
-            .receive("error", (payload) => console.log("Error"))
-   })();
-  </script>
+   function refresh() {
+     streaming = true
+     hide($twitterForm)
+     hide($backButton)
+   }
+
+   var socket  = new Phoenix.Socket("/socket")
+     , channel = socket.channel('video:lobby')
+
+   socket.connect()
+
+   channel.on("next_frame", onNewFrame);
+
+   $takePictureBtn.onclick = takePhoto
+   $backButton.onclick = refresh
+
+   channel.join()
+          .receive("ok", function (payload) {
+            console.log("Connected", payload)
+          })
+          .receive("error", function (payload) {
+            console.log("Error")
+          })
+ })();
+</script>
