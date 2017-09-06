@@ -6,9 +6,6 @@
     <img class="photobooth-image" id="video-frame" />
   </div>
   <div class="photobooth-actions">
-    <button class="btn take-photo js-take-photo">
-      Take Picture
-    </button>
     <div class="twitter-form hide js-twitter-form">
       <textarea placeholder="Hello from elixirconf..." name="tweet" class="form-field"></textarea>
       <button type="submit" class="btn twitter-btn js-twitter-btn">
@@ -24,7 +21,6 @@
    var videoFrame = document.getElementById("video-frame")
      , $overlay = document.querySelector('.js-overlay')
      , $backButton = document.querySelector('.js-cancel-button')
-     , $takePictureBtn = document.querySelector('.js-take-photo')
      , $twitterForm = document.querySelector('.js-twitter-form')
      , streaming  = true
 
@@ -55,7 +51,6 @@
      console.log('take photo')
      streaming = false
      flashScreen(function() {
-       $takePictureBtn.classList.add('hide')
        $twitterForm.classList.remove('hide')
      })
    }
@@ -89,8 +84,8 @@
    socket.connect()
 
    channel.on("next_frame", onNewFrame);
+   channel.on("take_picture", takePicture);
 
-   $takePictureBtn.onclick = takePhoto
    $backButton.onclick = refresh
 
    channel.join()
