@@ -7,7 +7,7 @@
 
   <div class="col-sm-3 actions">
     <div class="twitter-form hide js-twitter-form">
-      <textarea placeholder="Hello from elixirconf..." name="tweet" class="form-control"></textarea>
+      <textarea placeholder="Hello from elixirconf..." name="tweet" class="form-control js-tweet-msg"></textarea>
       <button type="submit" class="btn btn-primary tweet-btn js-twitter-btn">
         Tweet
       </button>
@@ -143,6 +143,8 @@
      , $twitterForm = document.querySelector('.js-twitter-form')
      , $effectSelect = document.querySelector('.js-effect-select')
      , $effects = document.getElementsByName('effect')
+     , $twitterBtn = document.querySelector('.js-twitter-btn')
+     , $tweetMsg = document.querySelector('.js-tweet-msg')
      , streaming  = true
 
    function flashScreen(cb) {
@@ -214,6 +216,12 @@
        takePhoto()
    }
 
+    function submitTweet() {
+      var msg = $tweetMsg.value
+        , img = videoFrame.src
+      channel.push('tweet', {img: img, msg: msg})
+    }
+
    var socket  = new Phoenix.Socket("/socket")
      , channel = socket.channel('video:lobby')
 
@@ -223,10 +231,11 @@
    channel.on("take_picture", takePhoto);
 
    document.addEventListener('keydown', onKeyDown)
-   $backButton.onclick = refresh
+   $backButton.addEventListener('click', refresh)
    for(var i = 0; i < $effects.length; i++) {
      $effects[i].addEventListener('click', updateEffect)
    }
+   $twitterBtn.addEventListener('click', submitTweet)
 
    channel.join()
           .receive("ok", function (payload) {
