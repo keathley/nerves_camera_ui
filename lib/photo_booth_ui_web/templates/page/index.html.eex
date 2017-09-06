@@ -6,6 +6,30 @@
     <img class="photobooth-image" id="video-frame" />
   </div>
   <div class="photobooth-actions">
+    <select class="effect-select js-effect-select">
+      <option>foo</option>
+      <option>stuff</option>
+      <option>none</option>
+      <option>negative</option>
+      <option>solarise</option>
+      <option>sketch</option>
+      <option>denoise</option>
+      <option>emboss</option>
+      <option>oilpaint</option>
+      <option>hatch</option>
+      <option>gpen</option>
+      <option>pastel</option>
+      <option>watercolor</option>
+      <option>film</option>
+      <option>blur</option>
+      <option>saturation</option>
+      <option>colorswap</option>
+      <option>washedout</option>
+      <option>posterise</option>
+      <optionc>colorpoint</option>
+      <option>colorbalance</option>
+      <option>cartoon</option>
+    </select>
     <div class="twitter-form hide js-twitter-form">
       <textarea placeholder="Hello from elixirconf..." name="tweet" class="form-field"></textarea>
       <button type="submit" class="btn twitter-btn js-twitter-btn">
@@ -22,6 +46,7 @@
      , $overlay = document.querySelector('.js-overlay')
      , $backButton = document.querySelector('.js-cancel-button')
      , $twitterForm = document.querySelector('.js-twitter-form')
+     , $effectSelect = document.querySelector('.js-effect-select')
      , streaming  = true
 
    function flashScreen(cb) {
@@ -78,6 +103,12 @@
      hide($backButton)
    }
 
+   function updateEffect() {
+     var effect = $effectSelect.options[$effectSelect.selectedIndex].text
+     console.log("updating effect", effect)
+     channel.push('update_effect', {effect: 'watercolor'})
+   }
+
    var socket  = new Phoenix.Socket("/socket")
      , channel = socket.channel('video:lobby')
 
@@ -87,6 +118,7 @@
    channel.on("take_picture", takePhoto);
 
    $backButton.onclick = refresh
+   $effectSelect.addEventListener('change', updateEffect)
 
    channel.join()
           .receive("ok", function (payload) {

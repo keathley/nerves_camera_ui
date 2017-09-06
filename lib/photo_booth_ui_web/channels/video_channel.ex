@@ -22,6 +22,17 @@ defmodule PhotoBoothUiWeb.VideoChannel do
     {:noreply, socket}
   end
 
+  def handle_in("update_effect", %{"effect" => effect}, socket) do
+    camera()
+    |> GenServer.cast({:set_img_effect, effect})
+
+    {:noreply, socket}
+  end
+
+  defp camera() do
+    GenServer.whereis({:global, PhotoBooth.Camera})
+  end
+
   # Add authorization logic here as required.
   defp authorized?(_payload) do
     true

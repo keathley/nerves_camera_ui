@@ -18,7 +18,7 @@
        bottom: 0;
        left: 0;
        margin: 0;
-       padding-bottom: 3em;
+       padding-bottom: 1em;
        background-color: #efefef;
      }
 
@@ -116,8 +116,12 @@
        border-radius: 4px;
      }
 
+     .effect-select {
+       margin-top: 0.4em;
+     }
+
      .photobooth-actions {
-       text-align: center;
+       text-align: right;
      }
 
      .photobooth-actions > .take-photo {
