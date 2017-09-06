@@ -22,14 +22,14 @@
      }
 
      .btn {
-       border: 1px solid #aaa;
+       /*border: 1px solid #aaa;
        background: #ccc;
        font-size: 24px;
        /* font-weight: lighter; */
-       text-align: center;
+       /*text-align: center;
        cursor: pointer;
        color: #222;
-       letter-spacing: 1.3px;
+       letter-spacing: 1.3px;*/
      }
 
      .row {
@@ -79,8 +79,20 @@
        border: 1px solid #ccc;
      }
 
-     textarea.form-field {
-       resize: none;
+     .tweet-btn {
+       margin-top: 1em;
+       width: 100%;
+     }
+
+     .cancel-btn {
+       width: 100%;
+       text-align: center;
+       margin-top: 1em;
+     }
+
+     textarea.form-control {
+       height: 200px;
+       /*resize: none;
        height: 80px;
        width: 76%;
        border-radius: 4px;
@@ -88,7 +100,7 @@
        font-weight: lighter;
        letter-spacing: 0.07em;
        padding: 0.4em 0.6em;
-       box-shadow: inset 0px 0px 4px 1px #ccc;
+       box-shadow: inset 0px 0px 4px 1px #ccc;*/
      }
 
      .twitter-btn {
@@ -103,7 +115,6 @@
      }
 
      .twitter-form {
-       text-align: initial;
        padding-top: 1em;
      }
 

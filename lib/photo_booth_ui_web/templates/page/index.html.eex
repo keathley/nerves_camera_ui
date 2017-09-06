@@ -1,18 +1,18 @@
 <div class="row">
   <div class="col-sm-9">
     <div class="photobooth">
-      <div class="hide cancel-button-border js-cancel-button">
-        <div class="cancel-button">✖</div>
-      </div>
       <img class="photobooth-image img-thumbnail" id="video-frame" />
     </div>
   </div>
 
   <div class="col-sm-3 actions">
     <div class="twitter-form hide js-twitter-form">
-      <textarea placeholder="Hello from elixirconf..." name="tweet" class="form-field"></textarea>
-      <button type="submit" class="btn twitter-btn js-twitter-btn">
+      <textarea placeholder="Hello from elixirconf..." name="tweet" class="form-control"></textarea>
+      <button type="submit" class="btn btn-primary tweet-btn js-twitter-btn">
         Tweet
+      </button>
+      <button type="button" class="btn btn-link cancel-btn js-cancel-button">
+        Take another photo
       </button>
     </div>
 
@@ -224,10 +224,9 @@
 
    document.addEventListener('keydown', onKeyDown)
    $backButton.onclick = refresh
-   $effects.forEach(function($el) {
-     $el.addEventListener('click', updateEffect)
-   })
-  //  $effectSelect.addEventListener('change', updateEffect)
+   for(var i = 0; i < $effects.length; i++) {
+     $effects[i].addEventListener('click', updateEffect)
+   }
 
    channel.join()
           .receive("ok", function (payload) {
