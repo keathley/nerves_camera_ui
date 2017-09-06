@@ -219,7 +219,13 @@
     function submitTweet() {
       var msg = $tweetMsg.value
         , img = videoFrame.src
+
       channel.push('tweet', {img: img, msg: msg})
+        .receive('ok', refresh)
+        .receive('error', function() {
+          console.log("Something went wrong")
+          refresh
+        })
     }
 
    var socket  = new Phoenix.Socket("/socket")

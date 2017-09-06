@@ -37,7 +37,7 @@ defmodule PhotoBoothUiWeb.VideoChannel do
     tweet(msg, img)
     camera()
     |> GenServer.cast({:set_img_effect, "none"})
-    {:noreply, socket}
+    {:reply, :ok, socket}
   end
 
   defp camera() do
