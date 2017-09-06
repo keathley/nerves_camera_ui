@@ -72,12 +72,15 @@
      }
    }
 
-   function takePhoto() {
-     console.log('take photo')
-     streaming = false
-     flashScreen(function() {
-       $twitterForm.classList.remove('hide')
-     })
+   function takePhoto(msg) {
+    console.log('take photo')
+    streaming = false
+    flashScreen(function() {
+      $twitterForm.classList.remove('hide')
+      if (msg.base64_data) {
+        setImage(msg.base64_data)
+      }
+    })
    }
 
    function setImage(img_data) {
