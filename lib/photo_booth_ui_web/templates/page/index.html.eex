@@ -236,7 +236,7 @@
    channel.on("next_frame", onNewFrame);
    channel.on("take_picture", takePhoto);
 
-   document.addEventListener('keydown', onKeyDown)
+  //  document.addEventListener('keydown', onKeyDown)
    $backButton.addEventListener('click', refresh)
    for(var i = 0; i < $effects.length; i++) {
      $effects[i].addEventListener('click', updateEffect)
