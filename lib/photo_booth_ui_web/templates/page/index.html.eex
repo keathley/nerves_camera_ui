@@ -84,7 +84,7 @@
    socket.connect()
 
    channel.on("next_frame", onNewFrame);
-   channel.on("take_picture", takePicture);
+   channel.on("take_picture", takePhoto);
 
    $backButton.onclick = refresh
 
