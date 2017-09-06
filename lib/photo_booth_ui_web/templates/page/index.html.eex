@@ -1,42 +1,137 @@
-<div class="photobooth">
-  <div class="hide cancel-button-border js-cancel-button">
-    <div class="cancel-button">✖</div>
+<div class="row">
+  <div class="col-sm-9">
+    <div class="photobooth">
+      <div class="hide cancel-button-border js-cancel-button">
+        <div class="cancel-button">✖</div>
+      </div>
+      <img class="photobooth-image img-thumbnail" id="video-frame" />
+    </div>
   </div>
-  <div class="image-wrapper">
-    <img class="photobooth-image" id="video-frame" />
-  </div>
-  <div class="photobooth-actions">
-    <select class="effect-select js-effect-select">
-      <option>foo</option>
-      <option>stuff</option>
-      <option>none</option>
-      <option>negative</option>
-      <option>solarise</option>
-      <option>sketch</option>
-      <option>denoise</option>
-      <option>emboss</option>
-      <option>oilpaint</option>
-      <option>hatch</option>
-      <option>gpen</option>
-      <option>pastel</option>
-      <option>watercolor</option>
-      <option>film</option>
-      <option>blur</option>
-      <option>saturation</option>
-      <option>colorswap</option>
-      <option>washedout</option>
-      <option>posterise</option>
-      <optionc>colorpoint</option>
-      <option>colorbalance</option>
-      <option>cartoon</option>
-    </select>
+
+  <div class="col-sm-3 actions">
     <div class="twitter-form hide js-twitter-form">
       <textarea placeholder="Hello from elixirconf..." name="tweet" class="form-field"></textarea>
       <button type="submit" class="btn twitter-btn js-twitter-btn">
         Tweet
       </button>
     </div>
+
+    <div class="effects js-effect-select">
+      <div class="radio">
+        <label>
+          <input type="radio" name="effect" value="none">
+          None
+        </label>
+      </div>
+
+      <div class="radio">
+        <label>
+          <input type="radio" name="effect" value="solarise">
+          solarise
+        </label>
+      </div>
+
+      <div class="radio">
+        <label>
+          <input type="radio" name="effect" value="sketch">
+          sketch
+        </label>
+      </div>
+
+      <div class="radio">
+        <label>
+          <input type="radio" name="effect" value="emboss">
+          emboss
+        </label>
+      </div>
+
+      <div class="radio">
+        <label>
+          <input type="radio" name="effect" value="oilpaint">
+          oilpaint
+        </label>
+      </div>
+
+      <div class="radio">
+        <label>
+          <input type="radio" name="effect" value="hatch">
+          hatch
+        </label>
+      </div>
+
+      <div class="radio">
+        <label>
+          <input type="radio" name="effect" value="pastel">
+          pastel
+        </label>
+      </div>
+
+      <div class="radio">
+        <label>
+          <input type="radio" name="effect" value="watercolor">
+          watercolor
+        </label>
+      </div>
+
+      <div class="radio">
+        <label>
+          <input type="radio" name="effect" value="film">
+          film
+        </label>
+      </div>
+
+      <div class="radio">
+        <label>
+          <input type="radio" name="effect" value="saturation">
+          saturation
+        </label>
+      </div>
+
+      <div class="radio">
+        <label>
+          <input type="radio" name="effect" value="colorswap">
+          colorswap
+        </label>
+      </div>
+
+      <div class="radio">
+        <label>
+          <input type="radio" name="effect" value="washedout">
+          washedout
+        </label>
+      </div>
+
+      <div class="radio">
+        <label>
+          <input type="radio" name="effect" value="posterise">
+          posterise
+        </label>
+      </div>
+
+      <div class="radio">
+        <label>
+          <input type="radio" name="effect" value="colorpoint">
+          colorpoint
+        </label>
+      </div>
+
+      <div class="radio">
+        <label>
+          <input type="radio" name="effect" value="colorbalance">
+          colorbalance
+        </label>
+      </div>
+
+      <div class="radio">
+        <label>
+          <input type="radio" name="effect" value="cartoon">
+          cartoon
+        </label>
+      </div>
+    </div>
+
   </div>
+
 </div>
 
 <script src="js/phoenix.js"></script>
@@ -73,11 +168,11 @@
    }
 
    function takePhoto(msg) {
-    console.log('take photo')
     streaming = false
     flashScreen(function() {
       $twitterForm.classList.remove('hide')
-      if (msg.base64_data) {
+      hide($effectSelect)
+      if (msg && msg.base64_data) {
         setImage(msg.base64_data)
       }
     })
@@ -104,12 +199,18 @@
      streaming = true
      hide($twitterForm)
      hide($backButton)
+     show($effectSelect)
    }
 
    function updateEffect() {
      var effect = $effectSelect.options[$effectSelect.selectedIndex].text
      console.log("updating effect", effect)
      channel.push('update_effect', {effect: 'watercolor'})
+   }
+
+   function onKeyDown(e) {
+     if (e.keyCode == 32)
+       takePhoto()
    }
 
    var socket  = new Phoenix.Socket("/socket")
@@ -120,8 +221,9 @@
    channel.on("next_frame", onNewFrame);
    channel.on("take_picture", takePhoto);
 
+   document.addEventListener('keydown', onKeyDown)
    $backButton.onclick = refresh
-   $effectSelect.addEventListener('change', updateEffect)
+  //  $effectSelect.addEventListener('change', updateEffect)
 
    channel.join()
           .receive("ok", function (payload) {
