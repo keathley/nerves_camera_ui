@@ -33,7 +33,7 @@ defmodule PhotoBoothUiWeb.VideoChannel do
     {:noreply, socket}
   end
 
-  def handle_in("tweet", %{"img" => img, "msg" => msg}, socket) do
+  def handle_in("tweet", %{"img" => "data:image/png;base64," <> img, "msg" => msg}, socket) do
     tweet(msg, img)
     camera()
     |> GenServer.cast({:set_img_effect, "none"})

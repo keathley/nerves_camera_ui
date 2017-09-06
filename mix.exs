@@ -19,7 +19,7 @@ defmodule PhotoBoothUi.Mixfile do
   def application do
     [
       mod: {PhotoBoothUi.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :oauther]
     ]
   end
 
