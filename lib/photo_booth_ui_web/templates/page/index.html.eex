@@ -200,6 +200,7 @@
 
    function refresh() {
      streaming = true
+     $tweetMsg.value = ''
      hide($twitterForm)
      hide($backButton)
      show($effectSelect)
@@ -221,11 +222,12 @@
         , img = videoFrame.src
 
       channel.push('tweet', {img: img, msg: msg})
-        .receive('ok', refresh)
-        .receive('error', function() {
-          console.log("Something went wrong")
-          refresh
-        })
+        // .receive('ok', refresh)
+        // .receive('error', function() {
+        //   console.log("Something went wrong")
+        //   refresh
+        // })
+      refresh()
     }
 
    var socket  = new Phoenix.Socket("/socket")
